@@ -4,9 +4,12 @@ import com.example.bookstorage.dto.BookDTO;
 import com.example.bookstorage.dto.BookRequestDTO;
 import com.example.bookstorage.entity.Book;
 import com.example.bookstorage.repository.BookRepository;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +55,25 @@ public class BookService {
         book.setAuthor(request.getAuthor());
 
         return convertToDTO(bookRepository.save(book));
+    }
+
+    public BookDTO getBookById(Integer id) {
+        Book book = bookRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("book with id: " + id + "doesn't exist"));
+
+        return convertToDTO(book);
+    }
+
+    public BookDTO getBookByISBN(String ISBN) {
+        Book book = bookRepository.getByISBN(ISBN)
+                .orElseThrow(() -> new IllegalArgumentException("book with ISBN: " + ISBN + "doesn't exist"));
+
+        return convertToDTO(book);
+    }
+
+    public List<BookDTO> getAllBooks() {
+        return bookRepository.findAll().stream()
+                .map(this::convertToDTO)
+                .toList();
     }
 }
