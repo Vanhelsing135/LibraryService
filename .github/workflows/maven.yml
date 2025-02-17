@@ -29,7 +29,8 @@ jobs:
           - 3306:3306
         env:
           MYSQL_ROOT_PASSWORD: 1234
-          MYSQL_DATABASE: testTask_db
+          MYSQL_DATABASE: Library_db
+
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
 
