@@ -15,6 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookService {
     private final BookRepository bookRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     public BookDTO createBook(BookRequestDTO requestDTO) {
         Book book = new Book();
@@ -24,6 +25,7 @@ public class BookService {
         book.setGenre(requestDTO.getGenre());
         book.setDescription(requestDTO.getDescription());
         Book newBook = bookRepository.save(book);
+        kafkaProducerService.sendBookCreatedMessage(String.valueOf(book.getId()));
         return convertToDTO(newBook);
     }
 
@@ -41,7 +43,9 @@ public class BookService {
         if (!bookRepository.existsById(id)) {
             throw new IllegalArgumentException("book with id: " + id + "doesn't exist");
         }
+
         bookRepository.deleteById(id);
+        kafkaProducerService.sendBookDeletedMessage(String.valueOf(id));
     }
 
     public BookDTO updateBook(Integer id, BookDTO request) {
