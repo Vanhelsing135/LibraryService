@@ -1,0 +1,10 @@
+1) Сборка проекта:
+    mvn clean install
+2) Создание контейнеров Docker для работы с БД MySQL и Kafka:
+    docker compose up
+3) Запуск сервиса хранилища:
+    cd book-storage-service
+    mvn spring-boot:run
+4) Запуск сервиса трекера:
+    cd book-tracke-service
+    mvn spring-boot:run
