@@ -13,11 +13,11 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
+    
 permissions:
   contents: read
   security-events: write
-
+  
 jobs:
   build:
 
@@ -30,6 +30,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: 1234
           MYSQL_DATABASE: storage_db
+
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
       mysql_tracker:
