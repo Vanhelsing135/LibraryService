@@ -6,6 +6,7 @@ import com.example.bookstorage.entity.Book;
 import com.example.bookstorage.repository.BookRepository;
 import com.example.bookstorage.service.BookService;
 import com.example.bookstorage.service.KafkaProducerService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -105,7 +106,7 @@ public class BookServiceTest {
     void getBookById_shouldThrowExceptionWhenNotFound() {
         when(bookRepository.findById(anyInt())).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> bookService.getBookById(1));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> bookService.getBookById(1));
         assertEquals("book with id: 1 doesn't exist", exception.getMessage());
     }
 
@@ -134,6 +135,6 @@ public class BookServiceTest {
     void getBookByISBN_shouldThrowExceptionWhenNotFound() {
         when(bookRepository.getByISBN(anyString())).thenReturn(Optional.empty());
 
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> bookService.getBookByISBN("ISBN"));
+        Exception exception = assertThrows(EntityNotFoundException.class, () -> bookService.getBookByISBN("ISBN"));
         assertEquals("book with ISBN: ISBN doesn't exist", exception.getMessage());
     }}
