@@ -4,6 +4,7 @@ import com.example.demo.entity.BookStatus;
 import com.example.demo.entity.BookTracker;
 import com.example.demo.repository.BookTrackerRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.List;
 public class BookTrackerService {
     private final BookTrackerRepository bookTrackerRepository;
 
+    @Transactional
     public void createBookRecord(Integer bookId) {
         if (bookTrackerRepository.existsByBookId(bookId)) {
             throw new IllegalArgumentException("Book has already registered");
@@ -33,6 +35,7 @@ public class BookTrackerService {
         return bookTrackerRepository.findByStatus(BookStatus.Available);
     }
 
+    @Transactional
     public void updateBookStatus(Integer bookId, BookStatus newStatus, LocalDateTime returnBy) {
         BookTracker bookTracker = bookTrackerRepository.findByBookId(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("book with id: " + bookId + " doesn't exist"));
@@ -50,6 +53,7 @@ public class BookTrackerService {
         bookTrackerRepository.save(bookTracker);
     }
 
+    @Transactional
     public void deleteBookRecord(Integer bookId) {
         bookTrackerRepository.deleteByBookId(bookId);
     }

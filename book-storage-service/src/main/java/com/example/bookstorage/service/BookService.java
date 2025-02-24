@@ -5,6 +5,7 @@ import com.example.bookstorage.dto.BookRequestDTO;
 import com.example.bookstorage.entity.Book;
 import com.example.bookstorage.repository.BookRepository;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ public class BookService {
     private final BookRepository bookRepository;
     private final KafkaProducerService kafkaProducerService;
 
+    @Transactional
     public BookDTO createBook(BookRequestDTO requestDTO) {
         Book book = new Book();
         book.setISBN(requestDTO.getISBN());
@@ -39,6 +41,7 @@ public class BookService {
         return bookDTO;
     }
 
+    @Transactional
     public void deleteBook(Integer id) {
         if (!bookRepository.existsById(id)) {
             throw new IllegalArgumentException("book with id: " + id + " doesn't exist");
@@ -48,6 +51,7 @@ public class BookService {
         kafkaProducerService.sendBookDeletedMessage(String.valueOf(id));
     }
 
+    @Transactional
     public BookDTO updateBook(Integer id, BookDTO request) {
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("book with id " + id + " doesn't exist"));
