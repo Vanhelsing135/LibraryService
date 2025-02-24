@@ -4,6 +4,7 @@ import com.example.bookstorage.dto.BookDTO;
 import com.example.bookstorage.dto.BookRequestDTO;
 import com.example.bookstorage.entity.Book;
 import com.example.bookstorage.repository.BookRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class BookService {
     @Transactional
     public BookDTO updateBook(Integer id, BookDTO request) {
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("book with id " + id + " doesn't exist"));
+                .orElseThrow(() -> new EntityNotFoundException("book with id " + id + " doesn't exist"));
 
         book.setISBN(request.getISBN());
         book.setTitle(request.getTitle());
@@ -67,14 +68,14 @@ public class BookService {
 
     public BookDTO getBookById(Integer id) {
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("book with id: " + id + " doesn't exist"));
+                .orElseThrow(() -> new EntityNotFoundException("book with id: " + id + " doesn't exist"));
 
         return convertToDTO(book);
     }
 
     public BookDTO getBookByISBN(String ISBN) {
         Book book = bookRepository.getByISBN(ISBN)
-                .orElseThrow(() -> new IllegalArgumentException("book with ISBN: " + ISBN + " doesn't exist"));
+                .orElseThrow(() -> new EntityNotFoundException("book with ISBN: " + ISBN + " doesn't exist"));
 
         return convertToDTO(book);
     }

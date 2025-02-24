@@ -17,7 +17,7 @@ import java.util.List;
 public class BookController {
     private final BookService bookService;
 
-    @GetMapping("/")
+    @GetMapping
     public ResponseEntity<List<BookDTO>> getAllBooks() {
         return ResponseEntity.ok(bookService.getAllBooks());
     }
@@ -27,17 +27,17 @@ public class BookController {
         return ResponseEntity.ok(bookService.getBookById(id));
     }
 
-    @GetMapping("/ISBN/{ISBN}")
+    @GetMapping("/by-ISBN/{ISBN}")
     public ResponseEntity<BookDTO> getBookByISBN(@PathVariable("ISBN") String ISBN) {
         return ResponseEntity.ok(bookService.getBookByISBN(ISBN));
     }
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<BookDTO> createBook(@RequestBody BookRequestDTO requestDTO) {
         return ResponseEntity.ok(bookService.createBook(requestDTO));
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping("/{id}")
     public ResponseEntity<BookDTO> updateBook(@PathVariable("id") Integer id, @RequestBody BookDTO bookDTO) {
         return ResponseEntity.ok(bookService.updateBook(id, bookDTO));
     }

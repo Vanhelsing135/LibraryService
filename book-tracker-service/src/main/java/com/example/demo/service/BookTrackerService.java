@@ -3,6 +3,7 @@ package com.example.demo.service;
 import com.example.demo.entity.BookStatus;
 import com.example.demo.entity.BookTracker;
 import com.example.demo.repository.BookTrackerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +39,7 @@ public class BookTrackerService {
     @Transactional
     public void updateBookStatus(Integer bookId, BookStatus newStatus, LocalDateTime returnBy) {
         BookTracker bookTracker = bookTrackerRepository.findByBookId(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("book with id: " + bookId + " doesn't exist"));
+                .orElseThrow(() -> new EntityNotFoundException("book with id: " + bookId + " doesn't exist"));
 
         bookTracker.setStatus(newStatus);
 
@@ -55,6 +56,9 @@ public class BookTrackerService {
 
     @Transactional
     public void deleteBookRecord(Integer bookId) {
+        if (!bookTrackerRepository.existsByBookId(bookId)) {
+            throw new IllegalArgumentException("record with bookId " + bookId + " doesn't exist");
+        }
         bookTrackerRepository.deleteByBookId(bookId);
     }
 }
