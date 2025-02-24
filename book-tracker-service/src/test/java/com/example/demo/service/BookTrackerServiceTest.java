@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -74,10 +75,18 @@ public class BookTrackerServiceTest {
 
     @Test
     void deleteBookRecord() {
+        when(bookTrackerRepository.existsByBookId(1)).thenReturn(true);
         doNothing().when(bookTrackerRepository).deleteByBookId(1);
 
         bookTrackerService.deleteBookRecord(1);
 
         verify(bookTrackerRepository).deleteByBookId(1);
+    }
+
+    @Test
+    void throwExceptionWhileDeletingBookRecord() {
+        when(bookTrackerRepository.existsByBookId(1)).thenReturn(false);
+
+        assertThrows(IllegalArgumentException.class, () -> bookTrackerService.deleteBookRecord(1));
     }
 }

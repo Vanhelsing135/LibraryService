@@ -23,21 +23,21 @@ public class BookTrackerController {
         return ResponseEntity.ok(bookTrackerService.getAvailableBooks());
     }
 
-    @PutMapping("/status/{bookId}")
+    @PutMapping("/{bookId}")
     public ResponseEntity<Void> updateBookStatus(@PathVariable("bookId") Integer bookId, @RequestParam BookStatus status,
                                                  @RequestParam(required = false) LocalDateTime returnBy) {
         bookTrackerService.updateBookStatus(bookId, status, returnBy);
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/delete/{bookId}")
+    @DeleteMapping("/{bookId}")
     public ResponseEntity<Void> deleteBookRecord(@PathVariable("bookId") Integer bookId) {
         bookTrackerService.deleteBookRecord(bookId);
         return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/create/{bookId}")
-    public ResponseEntity<Void> createBookRecord(@PathVariable("bookId") Integer bookId) {
+    @PostMapping
+    public ResponseEntity<Void> createBookRecord(@RequestParam("bookId") Integer bookId) {
         bookTrackerService.createBookRecord(bookId);
         return ResponseEntity.ok().build();
     }
