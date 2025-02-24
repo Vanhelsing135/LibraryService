@@ -15,8 +15,7 @@ import java.util.List;
 @RequestMapping("/book-storage/books")
 @RequiredArgsConstructor
 public class BookController {
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
     @GetMapping("/")
     public ResponseEntity<List<BookDTO>> getAllBooks() {
