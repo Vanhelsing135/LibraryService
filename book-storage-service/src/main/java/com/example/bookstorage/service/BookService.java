@@ -27,6 +27,7 @@ public class BookService {
 
         if (bookRepository.getByISBN(requestDTO.getISBN()).isPresent()) {
             log.warn("Attempt to create duplicate book with ISBN {}", requestDTO.getISBN());
+            throw new IllegalArgumentException("Book with ISBN :" + requestDTO.getISBN() + " already exists");
         }
         Book book = new Book();
         book.setISBN(requestDTO.getISBN());

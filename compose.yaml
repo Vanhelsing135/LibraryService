@@ -25,6 +25,17 @@ services:
     volumes:
       - db_tracker_data:/var/lib/mysql
 
+  db_auth:
+    image: mysql:8.0
+    container_name: mysql_library_db_auth
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: auth_db
+    ports:
+      - "3308:3306"
+    volumes:
+      - db_auth_data:/var/lib/mysql
   flyway_storage:
     image: flyway/flyway
     command: -url=jdbc:mysql://db_storage:3306/storage_db?allowPublicKeyRetrieval=true -user=root -password=1234 -locations=filesystem:/flyway/sql migrate
@@ -40,6 +51,14 @@ services:
       - ./flyway/tracker:/flyway/sql
     depends_on:
       - db_tracker
+
+  flyway_auth:
+    image: flyway/flyway
+    command: -url=jdbc:mysql://db_auth:3306/auth_db?allowPublicKeyRetrieval=true -user=root -password=1234 -locations=filesystem:/flyway/sql migrate
+    volumes:
+      - ./flyway/auth:/flyway/sql
+    depends_on:
+      - db_auth
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
@@ -66,3 +85,4 @@ services:
 volumes:
   db_storage_data:
   db_tracker_data:
+  db_auth_data:
